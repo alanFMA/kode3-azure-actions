@@ -1,68 +1,40 @@
-FROM node:16-bullseye-slim AS packages
-
-WORKDIR /app
-COPY package.json yarn.lock ./
-COPY packages packages
-COPY catalog-info.yaml ./
-
-#COPY plugins plugins
-
-RUN find packages \! -name "package.json" -mindepth 2 -maxdepth 2 -exec rm -rf {} \+
-
-# Stage 2 - Install dependencies and build packages
-
-FROM node:16-bullseye-slim AS build
-
-WORKDIR /app
-
-COPY --from=packages /app .
-
-# install sqlite3 dependencies 
-
-#RUN apt-get update && \
-#    apt-get install -y --no-install-recommends libsqlite3-dev python3 build-essential && \
-#    yarn config set python /usr/bin/python3
-
-RUN yarn install --frozen-lockfile --network-timeout 600000 && rm -rf "$(yarn cache dir)"
-
-COPY . .
-
-RUN yarn tsc
-RUN yarn --cwd packages/backend build
-
-# If you have not yet migrated to package roles, use the following command instead:
-#RUN yarn --cwd packages/backend backstage-cli backend:bundle --build-dependencies
-
-# Stage 3 - Build the actual backend image and install production dependencies
 FROM node:16-bullseye-slim
 
+# Install isolate-vm dependencies, these are needed by the @backstage/plugin-scaffolder-backend.
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    apt-get update && \
+    apt-get install -y --no-install-recommends python3 g++ build-essential && \
+    yarn config set python /usr/bin/python3
+
+# Install sqlite3 dependencies. You can skip this if you don't use sqlite3 in the image,
+# in which case you should also move better-sqlite3 to "devDependencies" in package.json.
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    apt-get install -y --no-install-recommends libsqlite3-dev
+
+# From here on we use the least-privileged `node` user to run the backend.
+USER node
+
+# This should create the app dir as `node`.
+# If it is instead created as `root` then the `tar` command below will fail: `can't create directory 'packages/': Permission denied`.
+# If this occurs, then ensure BuildKit is enabled (`DOCKER_BUILDKIT=1`) so the app dir is correctly created as `node`.
 WORKDIR /app
 
-# install sqlite3 dependencies, you can skip this if you don't use sqlite3 in the image
-#RUN apt-get update && \
-#    apt-get install -y --no-install-recommends libsqlite3-dev python3 build-essential && \
-#    rm -rf /var/lib/apt/lists/* && \
-#    yarn config set python /usr/bin/python3
+# This switches many Node.js dependencies to production mode.
+ENV NODE_ENV production
 
-# Copy the install dependencies from the build stage and context
-COPY --from=build /app/yarn.lock /app/package.json /app/packages/backend/dist/skeleton.tar.gz ./
+# Copy repo skeleton first, to avoid unnecessary docker cache invalidation.
+# The skeleton contains the package.json of each package in the monorepo,
+# and along with yarn.lock and the root package.json, that's enough to run yarn install.
+COPY --chown=node:node yarn.lock package.json packages/backend/dist/skeleton.tar.gz ./
 RUN tar xzf skeleton.tar.gz && rm skeleton.tar.gz
 
-RUN yarn install --frozen-lockfile --production && rm -rf "$(yarn cache dir)"
+RUN --mount=type=cache,target=/home/node/.cache/yarn,sharing=locked,uid=1000,gid=1000 \
+    yarn install --frozen-lockfile --production --network-timeout 300000
 
-# Copy the built packages from the build stage
-COPY --from=build /app/packages/backend/dist/bundle.tar.gz .
+# Then copy the rest of the backend bundle, along with any other files we might want.
+COPY --chown=node:node packages/backend/dist/bundle.tar.gz app-config*.yaml ./
 RUN tar xzf bundle.tar.gz && rm bundle.tar.gz
-
-# Copy any other files that we need at runtime
-COPY app-config.yaml ./
-#COPY github-app-proficloud-backstage-app-credentials.yaml ./ 
-
-#This is for Tech-Docs
-#RUN apt-get update && apt-get install -y python3 python3-pip
-#RUN pip3 install mkdocs-techdocs-core==1.0.1
-
-#This is enable for software templating to work
-#RUN pip3 install cookiecutter
 
 CMD ["node", "packages/backend", "--config", "app-config.yaml"]
