@@ -24,4 +24,4 @@ jobs:
           context: .
           push: true
           tags: backstage
-          file: packages/backend/Dockerfile
+          file: {context}/packages/backend/Dockerfile
