@@ -21,7 +21,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          context: .
           push: true
           tags: backstage
-          file: {context}/packages/backend/Dockerfile
+          file: packages/backend/Dockerfile
