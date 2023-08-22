@@ -14,26 +14,62 @@ spec:
   parameters:
     - title: Fill in some steps
       required:
-        - name
+        - subscription
+        - resourceGroup
+        - vnet
+        - subnet
       properties:
-        name:
-          title: Name
+        subscription:
+          title: Subscription
           type: string
-          description: Unique name of the component
-          ui:autofocus: true
-          ui:options:
-            rows: 5
-    - title: Choose a location
-      required:
-        - repoUrl
-      properties:
-        repoUrl:
-          title: Repository Location
+          description: Subscription Azure
+          default: 76461b8e-edbd-464c-ad30-b13ba994709c
+          enum:
+            - 76461b8e-edbd-464c-ad30-b13ba994709c
+            - 76461b8e-edbd-464c-ad30-b13ba994709c1
+            - 76461b8e-edbd-464c-ad30-b13ba994709c2
+          enumNames:
+            - 'dev'
+            - 'qa'
+            - 'prod'
+        resourceGroup:
+          title: Resource Group
           type: string
-          ui:field: RepoUrlPicker
+          description: Resource Group Azure
+          ui:field: DynamicPicker
           ui:options:
-            allowedHosts:
-              - github.com
+            valueKey: name
+            labelKey: name
+            url: api/azure/resource-groups?subscription={subscription}
+            formContextDependencies:
+              - subscription
+        vnet:
+          title: VNET
+          type: string
+          description: VNET Azure
+          ui:field: DynamicPicker
+          ui:options:
+            valueKey: name
+            labelKey: name
+            url: api/azure/vnets?subscription={subscription}
+            formContextDependencies:
+              - subscription
+        subnet:
+          title: Subnet
+          type: array
+          items:
+            type: string
+          description: SUBNET Azure
+          ui:field: DynamicPicker
+          ui:options:
+            multiple: true
+            valueKey: id
+            labelKey: name
+            url: api/azure/subnets?subscription={subscription}&resourceGroup={resourceGroup}&vnet={vnet}
+            formContextDependencies:
+              - subscription
+              - vnet
+              - resourceGroup
 
   # These steps are executed in the scaffolder backend, using data that we gathered
   # via the parameters above.

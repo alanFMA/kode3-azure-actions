@@ -1,0 +1,1 @@
+export { ValidateKebabCaseFieldExtension } from './extensions';

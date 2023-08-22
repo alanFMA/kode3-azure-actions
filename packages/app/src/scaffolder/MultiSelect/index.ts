@@ -1,0 +1,1 @@
+export { MultiSelectExtension } from './extension';

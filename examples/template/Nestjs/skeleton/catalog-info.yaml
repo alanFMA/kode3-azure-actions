@@ -1,0 +1,74 @@
+# apiVersion: backstage.io/v1alpha1
+# kind: Component
+# metadata:
+#   name: backstage-demo-nestjs
+#   annotations:
+#     github.com/project-slug: alessioerosferri/backstage-demo-nestjs
+#     backstage.io/techdocs-ref: dir:.
+#   tags:
+#     - javascript
+# spec:
+#   type: service # website/library
+#   lifecycle: production # production/deprecated
+#   owner: direct-team
+#   system: ecooh
+#   providesApis:
+#     - hello-world
+#   dependsOn:
+#     - resource:default/media-bucket
+#     - component:default/glooh
+# ---
+# apiVersion: backstage.io/v1alpha1
+# kind: Component
+# metadata:
+#   name: glooh
+# spec:
+#   type: website # website/library
+#   lifecycle: production # production/deprecated
+#   owner: direct-team
+#   system: ecooh
+# ---
+# apiVersion: backstage.io/v1alpha1
+# kind: API
+# metadata:
+#   name: hello-world
+#   description: hello world api
+# spec:
+#   type: openapi
+#   lifecycle: production
+#   owner: direct-team
+#   system: ecooh
+#   definition:
+#     $text: https://github.com/alessioerosferri/backstage-demo-nestjs/blob/master/docs/openapi.yml
+# ---
+# apiVersion: backstage.io/v1alpha1
+# kind: System
+# metadata:
+#   name: ecooh
+#   description: The whole of ecooh product
+# spec:
+#   owner: direct-team
+#   domain: digital-factory
+# ---
+# apiVersion: backstage.io/v1alpha1
+# kind: Resource
+# metadata:
+#   name: media-bucket
+#   description: Bucket where we store media
+# spec:
+#   type: s3-bucket
+#   owner: direct-team
+#   system: ecooh
+# ---
+# apiVersion: backstage.io/v1alpha1
+# kind: Group
+# metadata:
+#   name: direct-team
+#   description: The direct team, AKA ecooh squad
+# spec:
+#   type: team
+#   profile:
+#     displayName: Direct
+#   parent: digital-factory
+#   children: []
+#   members: [jdoe]

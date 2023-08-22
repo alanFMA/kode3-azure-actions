@@ -3,6 +3,9 @@ app:
   baseUrl: http://localhost:7007
 
 backend:
+  auth:
+    keys:
+      - secret: 'tzp2s6wtNeIV/Wiwl3xUg7lPnI8WxiCY'
   # Note that the baseUrl should be the URL that the browser and other clients
   # should use when communicating with the backend, i.e. it needs to be
   # reachable not just from within the backend host, but from all of your

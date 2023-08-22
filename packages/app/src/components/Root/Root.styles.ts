@@ -1,12 +1,12 @@
 import styled from 'styled-components'
-
+import Foguete from '../../assets/foguete.svg'
 
 export const ExtendedSidebarGroup = styled.div `
   header {
     height: 80%;
     background-image: linear-gradient(to right, #368e77,#8bdfcf);
     &::after {
-      content: url(https://kode3.tech/wp-content/themes/kode3/assets/img/profissionais_black_84dp.svg);
+      content: url(${Foguete});
     }
   }
   main {
@@ -22,13 +22,16 @@ export const ExtendedSidebarGroup = styled.div `
         }
       }
     }
-    button {
-      color: #46bd9f;
+    circle {
+      background-color: #46bd9f !important;
+    }
+    button + button {
+        background-color: #46bd9f;
       &:hover {
-        background: none;
-        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4)
+        background-color: #46bd9f;
+        filter: brightness(0.8);
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
       }
     }
   }
 `
-

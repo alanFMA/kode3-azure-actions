@@ -1,0 +1,109 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+
+# https://backstage.io/docs/features/software-catalog/descriptor-format#kind-template
+
+kind: Template
+
+metadata:
+  name: template-plugin-middlewares
+
+  title: Kode3 PluginMiddlewares
+
+  description: Template for use with plugin middlewares
+
+spec:
+  owner: user:guest
+
+  type: service
+
+  # these are the steps which are rendered in the frontend with the form input
+
+  parameters:
+    - title: Configurations
+
+      required:
+        - context
+
+      properties:
+        context:
+          title: Context
+
+          type: object
+
+          description: Get config group
+
+          ui:field: GroupConfPMiddlewaresField
+
+    - title: Choose a location
+
+      required:
+        - repoUrl
+
+      properties:
+        repoUrl:
+          title: Repository Location
+
+          type: string
+
+          ui:field: RepoUrlPicker
+
+          ui:options:
+            allowedHosts:
+              - github.com
+
+  steps:
+    - id: kode3:plugin-middlewares
+
+      name: Kode3 Get Group config
+
+      action: kode3:plugin-middlewares
+
+      input:
+        context: ${{ parameters.context }}
+
+    #Edit yaml
+
+    - id: fetch-base
+
+      name: Fetch Base
+
+      action: fetch:template
+
+      input:
+        url: ./content
+
+        values:
+          k8s_context_dev: ${{ parameters.context.dev }}
+
+          k8s_context_hml: ${{ parameters.context.hml }}
+
+          k8s_context_prod: ${{ parameters.context.prod }}
+
+    #Register Git
+
+    - id: publish
+
+      name: Publish
+
+      action: publish:github
+
+      input:
+        allowedHosts: ['github.com']
+
+        description: This is ${{ parameters.name }}
+
+        repoUrl: ${{ parameters.repoUrl }}
+
+  # Outputs are displayed to the user after a successful execution of the template.
+
+  output:
+    links:
+      - title: Repository
+
+        url: ${{ steps.publish.output.remoteUrl }}
+
+      - title: Open in catalog
+
+        icon: catalog
+
+        entityRef: ${{ steps.register.output.entityRef }}

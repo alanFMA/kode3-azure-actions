@@ -1,0 +1,28 @@
+openapi: 3.0.0
+info:
+  version: '1.0.0'
+  title: Backstage Demo NestJS
+  description: A service used to showcase backstage
+servers:
+  - description: Local development
+    url: http://localhost:3000
+
+paths:
+  /:
+    get:
+      summary: "Reset the database, only available in Test env"
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericMessage"
+
+components:
+  schemas:
+    GenericMessage:
+      type: "object"
+      properties:
+        message:
+          type: "string"

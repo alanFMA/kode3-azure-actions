@@ -1,13 +1,8 @@
 import React from 'react';
+import LogoShort from '../../assets/logoshort.png';
 
 const LogoIcon = () => {
-  return (
-    <img
-      width={39}
-      src="https://kode3.tech/wp-content/themes/kode3/assets/img/Caminho%2012212.png"
-      alt=""
-    />
-  );
+  return <img width={39} src={LogoShort} alt="" />;
 };
 
 export default LogoIcon;
