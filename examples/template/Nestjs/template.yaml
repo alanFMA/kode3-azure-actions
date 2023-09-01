@@ -14,7 +14,10 @@ spec:
     - title: Provide some simple information
       required:
         - component_id
+        - description
         - owner
+        - programming
+        - multiselect
       properties:
         component_id:
           title: Name
@@ -33,6 +36,18 @@ spec:
           ui:options:
             allowedKinds:
               - Group
+        programming:
+          title: Programming
+          type: string
+          description: Escolha uma linguagem
+          ui:field: Programming
+        multiselect:
+          title: MultiSelect
+          type: array
+          items:
+            type: string
+          description: Selecione a(s) linguagem(ns)
+          ui:field: MultiSelect
     - title: Choose a location
       required:
         - repoUrl
@@ -57,14 +72,16 @@ spec:
           description: ${{ parameters.description }}
           destination: ${{ parameters.repoUrl | parseRepoUrl }}
           owner: ${{ parameters.owner }}
+          programming: ${{ parameters.programming}}
+          multiselect: ${{ parameters.multiselect}}
 
     - id: publish
       name: Publish
-      action: publish:github
+      action: publish:azure
       input:
-        allowedHosts: ['github.com']
-        description: This is ${{ parameters.component_id }}
-        repoUrl: ${{ parameters.repoUrl }}
+        # allowedHosts: ['dev.azure.com']
+        description: 'This is {{ parameters.name }}'
+        repoUrl: '{{ parameters.repoUrl }}'
 
     - id: register
       name: Register

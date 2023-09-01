@@ -1,0 +1,54 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+# some metadata about the template itself
+metadata:
+  name: template-plugin-azurerepos
+  title: Azure Repositories
+  description: Template for use Azure Devops Repositories
+spec:
+  owner: alanFMA
+  type: website
+  parameters:
+    - title: Provide some simple information
+      required:
+        - selectazurerepos
+      properties:
+        selectazurerepos:
+          title: Azure Repositories
+          type: array
+          items:
+            type: string
+          description: Escolha o(s) repositório(s) para exclusão
+          ui:field: SelectAzureRepos
+
+  # here's the steps that are executed in series in the scaffolder backend
+  steps:
+    - id: fetch-base
+      name: Fetch Base
+      action: fetch:template
+      input:
+        url: ./template
+        values:
+          name: ${{ parameters.name }}
+
+    - id: fetch-docs
+      name: Fetch Docs
+      action: fetch:plain
+      input:
+        targetPath: ./community
+        url: https://github.com/backstage/community/tree/main/backstage-community-sessions
+
+    - id: publish
+      name: Publish
+      action: publish:github
+      input:
+        allowedHosts: ['github.com']
+        description: This is ${{ parameters.name }}
+        repoUrl: ${{ parameters.repoUrl }}
+
+    - id: register
+      name: Register
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps['publish'].output.repoContentsUrl }}
+        catalogInfoPath: '/catalog-info.yaml'

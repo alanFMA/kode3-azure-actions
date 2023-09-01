@@ -16,8 +16,6 @@ spec:
         - component_id
         - owner
         - url
-        - programming
-        - multiselect
       properties:
         component_id:
           title: Name
@@ -39,20 +37,8 @@ spec:
         url:
           title: URL
           type: string
-          description: Digite a url do Nestjs
+          description: Digite o número da porta para consumir a API
           ui:field: ValidateKebabCase
-        programming:
-          title: Programming
-          type: string
-          description: Escolha uma linguagem
-          ui:field: Programming
-        multiselect:
-          title: MultiSelect
-          type: array
-          items:
-            type: string
-          description: Selecione a(s) linguagem(ns)
-          ui:field: MultiSelect
     - title: Choose a location
       required:
         - repoUrl
@@ -63,7 +49,7 @@ spec:
           ui:field: RepoUrlPicker
           ui:options:
             allowedHosts:
-              - github.com
+              - dev.azure.com
   steps:
     - id: template
       name: Fetch Skeleton + Template
@@ -77,32 +63,20 @@ spec:
           description: ${{ parameters.description }}
           destination: ${{ parameters.repoUrl | parseRepoUrl }}
           owner: ${{ parameters.owner }}
-
-    # - id: publish
-    #   name: Publish
-    #   action: publish:github
-    #   input:
-    #     allowedHosts: ['github.com']
-    #     description: This is ${{ parameters.component_id }}
-    #     repoUrl: ${{ parameters.repoUrl }}
-
-    # - id: register
-    #   name: Register
-    #   action: catalog:register
-    #   input:
-    #     repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
-    #     catalogInfoPath: '/catalog-info.yaml'
-
-    - id: kode3:plugin-middlewares
-      name: Kode3 Get Group config
-      action: kode3:plugin-middlewares
+          url: ${{ parameters.url}}
+    - id: publish
+      name: Publish
+      action: publish:azure
       input:
-        component_id: ${{ parameters.component_id }}
-        owner: ${{ parameters.owner }}
-        url: ${{ parameters.url }}
-        programming: ${{ parameters.programming }}
-        multiselect: ${{ parameters.multiselect }}
-
+        # allowedHosts: ['dev.azure.com']
+        description: 'This is ${{ parameters.name }}'
+        repoUrl: '${{ parameters.repoUrl }}'
+    - id: register
+      name: Register
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        catalogInfoPath: '/catalog-info.yaml'
   output:
     links:
       - title: Repository

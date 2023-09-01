@@ -33,11 +33,10 @@ backend:
   # workingDirectory: /tmp # Use this to configure a working directory for the scaffolder, defaults to the OS temp-dir
 
 integrations:
-  github:
-    - host: github.com
-      # This is a Personal Access Token or PAT from GitHub. You can find out how to generate this token, and more information
-      # about setting up the GitHub integration here: https://backstage.io/docs/getting-started/configuration#setting-up-a-github-integration
-      token: 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
+  azure:
+    - host: dev.azure.com
+      token: 5pzbbfn2buw43ff4yuvya3xzdr5e5ssi2htjbke73clzkvx3insa
+      organization: kode3tech
     ### Example for how to add your GitHub Enterprise instance using the API:
     # - host: ghe.example.net
     #   apiBaseUrl: https://ghe.example.net/api/v3
@@ -63,18 +62,30 @@ techdocs:
 
 auth:
   # see https://backstage.io/docs/auth/ to learn about auth providers
-  auth:
   environment: development
   providers:
-    github:
+    microsoft:
       development:
-        clientId: '8a7b41d9739525187354'
-        clientSecret: '7d7725cf136a1b90594efa6b68b0351286385dfb'
+        clientId: a67a09f1-27e7-4dcc-9454-232df59aa2ae
+        clientSecret: 'rq48Q~1MKV4vQOMfLn8yUdv1ZLEfYgvACOlC0cuj'
+        tenantId: 20f29df5-8db1-4017-a9c4-5d81cb5a0369
 
 scaffolder:
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
 
 catalog:
+  providers:
+    azureDevOps:
+      yourProviderId: # identifies your dataset / provider independent of config changes
+        organization: kode3tech
+        project: kode3-test
+        repository: service-* # this will match all repos starting with service-*
+        path: /catalog-info.yaml
+        schedule: # optional; same options as in TaskScheduleDefinition
+          # supports cron, ISO duration, "human duration" as used in code
+          frequency: { minutes: 30 }
+          # supports ISO duration, "human duration" as used in code
+          timeout: { minutes: 3 }
   import:
     entityFilename: catalog-info.yaml
     pullRequestBranchName: backstage-integration
@@ -101,8 +112,13 @@ catalog:
       rules:
         - allow: [Template]
 
+    # - type: file
+    #   target: ../../examples/template/Middleware/template.yaml
+    #   rules:
+    #     - allow: [Template]
+
     - type: file
-      target: ../../examples/template/Middleware/template.yaml
+      target: ../../examples/template/AzureRepos/template.yaml
       rules:
         - allow: [Template]
 

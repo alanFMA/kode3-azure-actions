@@ -39,11 +39,9 @@ export const validateKebabCaseValidation = (
   value: string,
   validation: FieldValidation,
 ) => {
-  const kebabCase = /^[a-z0-9-_]+$/g.test(value);
+  const kebabCase = /^[a-z0-9\-_.\/]+$/g.test(value);
 
   if (kebabCase === false) {
-    validation.addError(
-      `Only use letters, numbers, hyphen ("-") and underscore ("_").`,
-    );
+    validation.addError(`Digite uma url válida`);
   }
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navigate, Route } from 'react-router-dom';
+import { Navigate, Route } from 'react-router';
 import { apiDocsPlugin, ApiExplorerPage } from '@backstage/plugin-api-docs';
 import {
   CatalogEntityPage,
@@ -23,38 +23,55 @@ import {
   techdocsPlugin,
   TechDocsReaderPage,
 } from '@backstage/plugin-techdocs';
-import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
-import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 import { UserSettingsPage } from '@backstage/plugin-user-settings';
 import { apis } from './apis';
 import { entityPage } from './components/catalog/EntityPage';
 import { searchPage } from './components/search/SearchPage';
 import { Root } from './components/Root';
 
-import { AlertDisplay, OAuthRequestDialog } from '@backstage/core-components';
+import {
+  AlertDisplay,
+  OAuthRequestDialog,
+  SignInProviderConfig,
+  SignInPage,
+} from '@backstage/core-components';
 import { createApp } from '@backstage/app-defaults';
-import { AppRouter, FlatRoutes } from '@backstage/core-app-api';
+import { FlatRoutes } from '@backstage/core-app-api';
 import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
-import { RequirePermission } from '@backstage/plugin-permission-react';
+import { PermissionedRoute } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
-import { ValidateKebabCaseFieldExtension } from './scaffolder/ValidateKebabCase';
-import { ProgrammingExtension } from './scaffolder/Programming';
+import { microsoftAuthApiRef } from '@backstage/core-plugin-api';
 import { MultiSelectExtension } from './scaffolder/MultiSelect';
+import { ProgrammingExtension } from './scaffolder/Programming';
+import { ValidateKebabCaseFieldExtension } from './scaffolder/ValidateKebabCase';
+import { SelectAzureReposExtension } from './scaffolder/SelectAzureRepos';
+import { DynamicPickerExtension } from './scaffolder/DynamicPicker/DynamicPicker';
+
+const microsoftAuthProvider: SignInProviderConfig = {
+  id: 'azure-auth-provider',
+  title: 'Microsoft Active Directory',
+  message:
+    'Sign in to Backstage Application using your Active Directory account.',
+  apiRef: microsoftAuthApiRef,
+};
 
 const app = createApp({
   apis,
+  components: {
+    SignInPage: props => (
+      <SignInPage {...props} auto provider={microsoftAuthProvider} />
+    ),
+  },
   bindRoutes({ bind }) {
     bind(catalogPlugin.externalRoutes, {
       createComponent: scaffolderPlugin.routes.root,
       viewTechDoc: techdocsPlugin.routes.docRoot,
-      createFromTemplate: scaffolderPlugin.routes.selectedTemplate,
     });
     bind(apiDocsPlugin.externalRoutes, {
       registerApi: catalogImportPlugin.routes.importPage,
     });
     bind(scaffolderPlugin.externalRoutes, {
       registerComponent: catalogImportPlugin.routes.importPage,
-      viewTechDoc: techdocsPlugin.routes.docRoot,
     });
     bind(orgPlugin.externalRoutes, {
       catalogIndex: catalogPlugin.routes.catalogIndex,
@@ -62,9 +79,12 @@ const app = createApp({
   },
 });
 
+const AppProvider = app.getProvider();
+const AppRouter = app.getRouter();
+
 const routes = (
   <FlatRoutes>
-    <Route path="/" element={<Navigate to="catalog" />} />
+    <Navigate key="/" to="catalog" />
     <Route path="/catalog" element={<CatalogIndexPage />} />
     <Route
       path="/catalog/:namespace/:kind/:name"
@@ -76,16 +96,14 @@ const routes = (
     <Route
       path="/docs/:namespace/:kind/:name/*"
       element={<TechDocsReaderPage />}
-    >
-      <TechDocsAddons>
-        <ReportIssue />
-      </TechDocsAddons>
-    </Route>
+    />
     <Route path="/create" element={<ScaffolderPage />}>
       <ScaffolderFieldExtensions>
+        <DynamicPickerExtension />
         <ValidateKebabCaseFieldExtension />
         <ProgrammingExtension />
         <MultiSelectExtension />
+        <SelectAzureReposExtension />
       </ScaffolderFieldExtensions>
     </Route>
     <Route path="/api-docs" element={<ApiExplorerPage />} />
@@ -93,13 +111,10 @@ const routes = (
       path="/tech-radar"
       element={<TechRadarPage width={1500} height={800} />}
     />
-    <Route
+    <PermissionedRoute
       path="/catalog-import"
-      element={
-        <RequirePermission permission={catalogEntityCreatePermission}>
-          <CatalogImportPage />
-        </RequirePermission>
-      }
+      permission={catalogEntityCreatePermission}
+      element={<CatalogImportPage />}
     />
     <Route path="/search" element={<SearchPage />}>
       {searchPage}
@@ -109,12 +124,14 @@ const routes = (
   </FlatRoutes>
 );
 
-export default app.createRoot(
-  <>
+const App = () => (
+  <AppProvider>
     <AlertDisplay />
     <OAuthRequestDialog />
     <AppRouter>
       <Root>{routes}</Root>
     </AppRouter>
-  </>,
+  </AppProvider>
 );
+
+export default App;
