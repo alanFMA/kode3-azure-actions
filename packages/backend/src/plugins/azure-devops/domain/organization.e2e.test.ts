@@ -1,14 +1,14 @@
 import { getRootLogger, loadBackendConfig } from '@backstage/backend-common';
 import { azureAxiosInstance } from './axios';
-import { BackstageConfigIntegrations } from '../../../backstage-config';
-import { AzureProjectService } from './project';
+import { BackstageConfigIntegrations } from '../../backstage-config';
+import { AzureOrganizationService } from './organization';
 import { Axios } from 'axios';
 
 jest.setTimeout(60000);
 
-describe('Azure DevOps Project Services', () => {
+describe('Azure DevOps Organization Services', () => {
   let axiosHandler: Axios;
-  let service: AzureProjectService;
+  let service: AzureOrganizationService;
   let integrationsConfig: BackstageConfigIntegrations;
 
   beforeAll(async () => {
@@ -23,12 +23,12 @@ describe('Azure DevOps Project Services', () => {
       integrationsConfig?.azure?.find(() => true)?.token ||
       process.env.AZURE_DEVOPS_TOKEN ||
       '';
-    const defaultOrganization =
-      integrationsConfig?.azure?.find(() => true)?.organization ?? ''
+    
+      const defaultOrganization = integrationsConfig?.azure?.find(() => true)?.organization ?? ''
 
     try {
       axiosHandler = azureAxiosInstance(azurePAT);
-      service = new AzureProjectService(axiosHandler, defaultOrganization);
+      service = new AzureOrganizationService(axiosHandler, defaultOrganization);
     } catch (error) {
       logger.error(error);
     }

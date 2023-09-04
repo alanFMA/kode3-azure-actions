@@ -1,6 +1,6 @@
 import { getRootLogger, loadBackendConfig } from '@backstage/backend-common';
 import { azureAxiosInstance } from './axios';
-import { BackstageConfigIntegrations } from '../../../backstage-config';
+import { BackstageConfigIntegrations } from '../../backstage-config';
 import { AzureVariableGroupService } from './variable-group';
 import { Axios } from 'axios';
 

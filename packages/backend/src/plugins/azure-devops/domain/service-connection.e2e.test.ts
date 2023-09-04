@@ -1,6 +1,6 @@
 import { getRootLogger, loadBackendConfig } from '@backstage/backend-common';
 import { azureAxiosInstance } from './axios';
-import { BackstageConfigIntegrations } from '../../../backstage-config';
+import { BackstageConfigIntegrations } from '../../backstage-config';
 import { AzureServiceConnectionService } from './service-connection';
 import { Axios } from 'axios';
 
@@ -10,8 +10,8 @@ describe('Azure DevOps Service Connection Services', () => {
   let axiosHandler: Axios;
   let service: AzureServiceConnectionService;
   let integrationsConfig: BackstageConfigIntegrations;
-  const organization = 'telefonica-vivo-brasil';
-  const project = 'ID000061-mvp-cloud';
+  const organization = 'org';
+  const project = 'proj';
 
   beforeAll(async () => {
     const logger = getRootLogger();

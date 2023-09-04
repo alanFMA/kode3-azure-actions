@@ -1,6 +1,6 @@
 import { getRootLogger, loadBackendConfig } from '@backstage/backend-common';
 import { azureAxiosInstance } from './axios';
-import { BackstageConfigIntegrations } from '../../../backstage-config';
+import { BackstageConfigIntegrations } from '../../backstage-config';
 import { AzureRepoService } from './repository';
 import { Axios } from 'axios';
 
@@ -10,15 +10,15 @@ describe('Azure DevOps Repository Services', () => {
   let service: AzureRepoService;
   let axiosHandler: Axios;
   let integrationsConfig: BackstageConfigIntegrations;
-  const organization = 'my-org';
-  const project = 'az-project-test';
-  const repository = 'bk-teste-22';
-  const renameTo = `DELETE-ME-${repository}`;
-  const repoKey = {
-    organization,
-    project,
-    repository,
-  };
+  // const organization = 'my-org';
+  // const project = 'az-project-test';
+  // const repository = 'bk-teste-22';
+  // const renameTo = `DELETE-ME-${repository}`;
+  // const repoKey = {
+  //   organization,
+  //   project,
+  //   repository,
+  // };
 
   beforeAll(async () => {
     const logger = getRootLogger();
@@ -127,7 +127,7 @@ describe('Azure DevOps Repository Services', () => {
   // });
 
   // test('clean RECREATED-*', async () => {
-  //   const org = {organization: 'telefonica-vivo-brasil', project: 'ID000061-mvp-cloud'}
+  //   const org = {organization: 'org', project: 'proj'}
   //   const allrepo = await service.list(org)
   //   const filtered = allrepo.data.filter(r => r.name.toLocaleLowerCase().startsWith('recreated-'))
   //   for (const { name: repo_name } of filtered) {

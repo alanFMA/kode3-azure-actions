@@ -9,7 +9,7 @@ spec:
   owner: alanFMA
   type: website
   parameters:
-    - title: Provide some simple information
+    - title: Kode3Tech
       required:
         - selectazurerepos
       properties:

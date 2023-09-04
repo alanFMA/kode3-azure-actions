@@ -1,14 +1,16 @@
 import { getRootLogger, loadBackendConfig } from '@backstage/backend-common';
 import { azureAxiosInstance } from './axios';
-import { BackstageConfigIntegrations } from '../../../backstage-config';
-import { AzureOrganizationService } from './organization';
+import { BackstageConfigIntegrations } from '../../backstage-config';
+import { AzurePipelineService } from './pipeline';
+import { AzureRepoService } from './repository';
 import { Axios } from 'axios';
 
-jest.setTimeout(60000);
+jest.setTimeout(600000);
 
-describe('Azure DevOps Organization Services', () => {
+describe('Azure DevOps Pipeline Services', () => {
   let axiosHandler: Axios;
-  let service: AzureOrganizationService;
+  let service: AzurePipelineService;
+  let repoService: AzureRepoService;
   let integrationsConfig: BackstageConfigIntegrations;
 
   beforeAll(async () => {
@@ -23,12 +25,11 @@ describe('Azure DevOps Organization Services', () => {
       integrationsConfig?.azure?.find(() => true)?.token ||
       process.env.AZURE_DEVOPS_TOKEN ||
       '';
-    
-      const defaultOrganization = integrationsConfig?.azure?.find(() => true)?.organization ?? ''
 
     try {
       axiosHandler = azureAxiosInstance(azurePAT);
-      service = new AzureOrganizationService(axiosHandler, defaultOrganization);
+      repoService = new AzureRepoService(axiosHandler);
+      service = new AzurePipelineService(axiosHandler, repoService);
     } catch (error) {
       logger.error(error);
     }
@@ -39,11 +40,6 @@ describe('Azure DevOps Organization Services', () => {
   });
   test('Service instance check', async () => {
     expect(service).toBeDefined();
-  });
-
-  test('exists', async () => {
-    const result = await service.list();
-    expect(result[0].id).toBeTruthy();
   });
 
 });

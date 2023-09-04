@@ -7,6 +7,13 @@ import {
   MenuItem,
 } from '@material-ui/core';
 import { FieldProps } from '@rjsf/core';
+import { useApi } from '@backstage/core-plugin-api';
+import { proxyAzurePluginApiRef } from '../../plugins/azure-devops-apiref';
+
+interface Repo {
+  id: string;
+  name: string;
+}
 
 export const SelectAzureRepos = ({
   onChange,
@@ -15,24 +22,23 @@ export const SelectAzureRepos = ({
   formData,
   schema,
 }: FieldProps<string[]>) => {
-  const [repos, setRepos] = useState<string[]>([]);
+  const [repos, setRepos] = useState<Repo[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [fetchError, setFetchError] = useState<Error | null>(null);
+  const azureAPI = useApi(proxyAzurePluginApiRef);
 
   useEffect(() => {
-    fetch(
-      'https://dev.azure.com/kode3tech/kode3-test/_apis/git/repositories?api-version=7.0',
-    )
-      .then(response => response.json())
+    azureAPI
+      .repositories('kode3tech', 'kode3-test')
       .then(data => {
-        setRepos(data.repos);
+        setRepos(data);
         setIsLoading(false);
       })
       .catch(error => {
         setFetchError(error);
         setIsLoading(false);
       });
-  }, []);
+  }, [azureAPI]);
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -66,8 +72,8 @@ export const SelectAzureRepos = ({
           Selecione um repositório
         </MenuItem>
         {repos.map((repo, index) => (
-          <MenuItem key={index} value={repo}>
-            {repo}
+          <MenuItem key={index} value={repo.name}>
+            {repo.name}
           </MenuItem>
         ))}
       </Select>
