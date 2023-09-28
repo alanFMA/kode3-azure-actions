@@ -1,0 +1,1 @@
+export { SelectAzureVariableGroupsExtension } from './extension';

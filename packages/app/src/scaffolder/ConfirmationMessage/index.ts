@@ -1,0 +1,1 @@
+export { ConfirmationMessageExtension } from './extension';

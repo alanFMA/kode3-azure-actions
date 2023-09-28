@@ -3,10 +3,7 @@ import { setup } from 'axios-cache-adapter';
 // import https from 'https';
 // import http from 'http';
 
-
-export function azureAxiosInstance(azurePat: string){
-
-
+export function azureAxiosInstance(azurePat: string) {
   // const httpAgent     = new http.Agent({ keepAlive: true });
   // const httpsAgent    = new https.Agent({ keepAlive: true });
   const AXIOS_TIMEOUT_SECONDS = 60;
@@ -26,7 +23,6 @@ export function azureAxiosInstance(azurePat: string){
     retryDelay: axiosRetry.exponentialDelay,
   });
 
-
   axiosInstance.interceptors.request.use(v => {
     v.auth = {
       username: '',
@@ -38,9 +34,10 @@ export function azureAxiosInstance(azurePat: string){
       ...v.params,
     };
 
-    if(!v.headers) v.headers = {}
-    if(!v.headers.Accept){
-      v.headers.Accept = 'application/json;api-version=6.1-preview.1;excludeUrls=true;enumsAsNumbers=true;msDateFormat=true;noArrayWrap=true'
+    if (!v.headers) v.headers = {};
+    if (!v.headers.Accept) {
+      v.headers.Accept =
+        'application/json;api-version=6.1-preview.1;excludeUrls=true;enumsAsNumbers=true;msDateFormat=true;noArrayWrap=true';
     }
     return v;
   });

@@ -46,6 +46,10 @@ import { ProgrammingExtension } from './scaffolder/Programming';
 import { ValidateKebabCaseFieldExtension } from './scaffolder/ValidateKebabCase';
 import { SelectAzureReposExtension } from './scaffolder/SelectAzureRepos';
 import { DynamicPickerExtension } from './scaffolder/DynamicPicker/DynamicPicker';
+import { SelectAzurePipelinesExtension } from './scaffolder/SelectAzurePipelines';
+import { ConfirmationMessageExtension } from './scaffolder/ConfirmationMessage';
+import { SelectAzureVariableGroupsExtension } from './scaffolder/SelectAzureVariableGroups';
+import { VariablesArrayExtension } from './scaffolder/VariablesArray';
 
 const microsoftAuthProvider: SignInProviderConfig = {
   id: 'azure-auth-provider',
@@ -104,6 +108,10 @@ const routes = (
         <ProgrammingExtension />
         <MultiSelectExtension />
         <SelectAzureReposExtension />
+        <SelectAzurePipelinesExtension />
+        <ConfirmationMessageExtension />
+        <SelectAzureVariableGroupsExtension />
+        <VariablesArrayExtension />
       </ScaffolderFieldExtensions>
     </Route>
     <Route path="/api-docs" element={<ApiExplorerPage />} />

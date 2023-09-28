@@ -1,0 +1,48 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+# some metadata about the template itself
+metadata:
+  name: template-plugin-addazurevariablegroups
+  title: Adding Azure VariableGroups
+  description: Template for adding Azure Devops VariableGroups
+spec:
+  owner: alanFMA
+  type: website
+  parameters:
+    - title: Kode3tech - VariableGroups
+      required:
+        - name
+        - description
+      properties:
+        name:
+          title: Name
+          type: string
+          description: Variable Group Name
+        description:
+          title: Description
+          type: string
+          description: Help others understand what this variable group is for.
+        variables:
+          title: Variables
+          ype: array
+          items:
+            type: object
+            properties:
+              name:
+                title: Name
+                type: string
+                description: Variable Name
+              value:
+                title: Value
+                type: string
+                description: Variable Value
+          description: adicione variáveis
+          ui:field: VariablesArray
+  steps:
+    - id: kode3:add-variables
+      name: Kode3 Add Variables Groups for Azure Devops
+      action: kode3:add-variables
+      input:
+        name: ${{ parameters.name }}
+        description: ${{ parameters.description }}
+        variables: ${{ parameters.variables }}

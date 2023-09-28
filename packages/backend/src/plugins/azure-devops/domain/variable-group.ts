@@ -4,9 +4,13 @@ import {
   AzureVariableGroupInfo,
   AzureDistributedVariableGroup,
 } from './variable-group.types';
+import { AzureProjectService } from './project';
 
 export class AzureVariableGroupService {
-  constructor(private axios: Axios) {}
+  constructor(
+    private axios: Axios,
+    private projectService?: AzureProjectService,
+  ) {}
   async list({
     organization,
     project,
@@ -102,6 +106,61 @@ export class AzureVariableGroupService {
 
     return this.axios.delete<any, any>(
       `https://dev.azure.com/${organization}/${project}/_apis/distributedtask/variablegroups/${detail.data.id}?projectIds=${detail.data.variableGroupProjectReferences[0].projectReference.id}`,
+      {
+        params: {
+          'api-version': '7.1-preview.2',
+        },
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+        validateStatus: useDefaultThrow ? undefined : () => true,
+      },
+    );
+  }
+
+  async create(
+    {
+      organization,
+      project,
+    }: Pick<AzureRepositoryKey, 'organization' | 'project'>,
+    name: string,
+    description: string,
+    variables: Record<string, string>,
+    useDefaultThrow = true,
+  ) {
+    const projects = await this.projectService?.list();
+
+    const detail = projects?.find(p => p.projectName === project);
+
+    if (!detail) return undefined;
+
+    const payload = {
+      name,
+      description,
+      // providerData: {
+      //   description: "teste prov data desc",
+      //   name: "teste prov data name",
+      //   projectReference: detail.data.variableGroupProjectReferences
+      // },
+      type: '',
+      variableGroupProjectReferences: [
+        {
+          name,
+          description,
+          projectReference: {
+            id: detail.projectId,
+            name: detail.projectName,
+          },
+        },
+      ],
+      variables,
+    };
+
+    // projectIds=${detail.data.variableGroupProjectReferences[0].projectReference.id}
+
+    return this.axios.post<any, any>(
+      `https://dev.azure.com/${organization}/_apis/distributedtask/variablegroups`,
+      JSON.stringify(payload),
       {
         params: {
           'api-version': '7.1-preview.2',

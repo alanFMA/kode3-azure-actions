@@ -62,6 +62,8 @@ export interface IVaultInfo {
 export interface IProjectInfo extends IAzureDevOpsLinks {
   id: string;
   name?: string;
+  projectName?: string;
+  projectId?: string;
   description?: string;
   resourceGroups?: IResourceGroupInfo;
 }

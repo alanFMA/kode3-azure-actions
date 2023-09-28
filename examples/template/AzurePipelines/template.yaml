@@ -2,41 +2,43 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 # some metadata about the template itself
 metadata:
-  name: template-plugin-azurerepos
-  title: Azure Repositories
-  description: Template for use Azure Devops Repositories
+  name: template-plugin-azurepipelines
+  title: Azure Pipelines
+  description: Template for use Azure Devops Pipelines
 spec:
   owner: alanFMA
   type: website
   parameters:
     - title: Kode3Tech
       required:
-        - selectazurerepos
+        - selectazurepipelines
       properties:
-        selectazurerepos:
-          title: Azure Repositories
+        selectazurepipelines:
+          title: Azure Pipelines
           type: array
           items:
             type: string
-          description: Escolha o(s) repositório(s) para exclusão
-          ui:field: SelectAzureRepos
+          description: É obrigatório a seleção de pelo menos uma pipeline.
+          ui:field: SelectAzurePipelines
+    - title: Confirmação
+      properties:
+        confirmationmessage:
+          title: Confirmação
+          type: boolean
+          description: Deseja realmente prosseguir com esta ação?
+          ui:field: ConfirmationMessage
+
   # here's the steps that are executed in series in the scaffolder backend
   steps:
-    # - id: fetch-base
-    #   name: Fetch Base
-    #   action: fetch:template
-    #   input:
-    #     url: ./template
-    #     values:
-    #       selectazurerepos: ${{ parameters.selectazurerepos }}
-
-    - id: kode3:remove-azure-repos
-      name: Kode3 Remove Azure Repos
-      action: kode3:remove-azure-repos
+    - id: kode3:remove-azure-pipelines
+      name: Kode3 Remove Azure Pipelines
+      action: kode3:remove-azure-pipelines
       input:
         context: ${{ parameters.context }}
-        selectazurerepos: ${{ parameters.selectazurerepos }}
-
+        selectazurepipelines: ${{ parameters.selectazurepipelines }}
+  review:
+    omitSteps:
+      - Confirmação
     # - id: fetch-docs
     #   name: Fetch Docs
     #   action: fetch:plain

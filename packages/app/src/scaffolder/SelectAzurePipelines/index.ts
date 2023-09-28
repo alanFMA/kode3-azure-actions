@@ -1,0 +1,1 @@
+export { SelectAzurePipelinesExtension } from './extension';

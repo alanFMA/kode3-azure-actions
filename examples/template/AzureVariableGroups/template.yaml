@@ -1,0 +1,50 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+# some metadata about the template itself
+metadata:
+  name: template-plugin-azurevariablegroups
+  title: Azure VariableGroups
+  description: Template for use Azure Devops VariableGroups
+spec:
+  owner: alanFMA
+  type: website
+  parameters:
+    - title: Kode3Tech
+      required:
+        - selectazurevariablegroups
+      properties:
+        selectazurevariablegroups:
+          title: Azure VariableGroups
+          type: array
+          items:
+            type: string
+          description: É obrigatório a seleção de pelo menos um grupo de variáveis
+          ui:field: SelectAzureVariableGroups
+    - title: Confirmação
+      properties:
+        confirmationmessage:
+          title: Confirmação
+          type: boolean
+          description: Deseja realmente prosseguir com esta ação?
+          ui:field: ConfirmationMessage
+  steps:
+    - id: kode3:adding-azure-variablegroups
+      name: Kode3 Adding Azure Variablegroups
+      action: kode3:adding-azure-variablegroups
+      # input:
+      #   context: ${{ parameters.context }}
+      #   selectazurevariablegroups: ${{ parameters.selectazurevariablegroups }}
+    # - id: fetch-docs
+    #   name: Fetch Docs
+    #   action: fetch:plain
+    #   input:
+    #     targetPath: ./community
+    #     url: https://github.com/backstage/community/tree/main/backstage-community-sessions
+
+    # - id: publish
+    #   name: Publish
+    #   action: publish:github
+    #   input:
+    #     allowedHosts: ['github.com']
+    #     description: This is ${{ parameters.name }}
+    #     repoUrl: ${{ parameters.repoUrl }}

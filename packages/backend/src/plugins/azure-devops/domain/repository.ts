@@ -40,7 +40,7 @@ export class AzureRepoService {
       }),
       {
         params: {
-          'api-version': '5.0-preview.1',
+          'api-version': '7.0',
         },
         headers: {
           'Content-Type': 'application/json; charset=utf-8',
@@ -71,7 +71,7 @@ export class AzureRepoService {
       }),
       {
         params: {
-          'api-version': '5.0-preview.2',
+          'api-version': '7.0',
         },
         headers: {
           'Content-Type': 'application/json; charset=utf-8',
@@ -105,7 +105,7 @@ export class AzureRepoService {
       `https://dev.azure.com/${organization}/${projectId}/_apis/git/Repositories/${repoId}`,
       {
         params: {
-          'api-version': '5.0-preview.1',
+          'api-version': '7.0',
         },
         headers: {
           'Content-Type': 'application/json; charset=utf-8',

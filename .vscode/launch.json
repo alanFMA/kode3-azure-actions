@@ -1,0 +1,35 @@
+{
+  "version": "0.2.0",
+  "configurations": [{
+      "name": "🚀 Debug [backend]",
+      "request": "launch",
+      "runtimeArgs": ["run", "start-backend"],
+      "runtimeExecutable": "yarn",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "node",
+      "console": "integratedTerminal", 
+      "args": [
+        "--config", "../../app-config.yaml", 
+        "--config", "../../app-config.local.yaml"
+      ],
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "name": "🧪 Debug Current [backend]",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/packages/backend",
+      "runtimeArgs": ["test", "${file}"],
+      "runtimeExecutable": "yarn",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "node",
+      "console": "integratedTerminal", 
+      
+      "args": [
+        // "--config", "../../app-config.yaml", 
+        // "--config", "../../app-config.local.yaml"
+      ],
+      "envFile": "${workspaceFolder}/.env"
+    },
+  ],
+  "compounds": []
+}

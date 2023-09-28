@@ -9,10 +9,7 @@ import { AzureRepositoryKey } from './repository.types';
 import { AzureRepoService } from './repository';
 
 export class AzurePipelineService {
-  constructor(
-    private axios: Axios,
-    private repoService?: AzureRepoService,
-  ) {}
+  constructor(private axios: Axios, private repoService?: AzureRepoService) {}
 
   async list({
     organization,
@@ -102,7 +99,7 @@ export class AzurePipelineService {
       JSON.stringify(payload),
       {
         params: {
-          'api-version': '5.0',
+          'api-version': '7.0',
         },
         headers: {
           'Content-Type': 'application/json; charset=utf-8',
@@ -125,7 +122,7 @@ export class AzurePipelineService {
       `https://dev.azure.com/${organization}/${project}/_apis/build/definitions/${id}`,
       {
         params: {
-          'api-version': '6.0-preview.7',
+          'api-version': '7.0',
           revision,
         },
       },
@@ -147,7 +144,7 @@ export class AzurePipelineService {
       }),
       {
         params: {
-          'api-version': '6.0-preview.7',
+          'api-version': '7.0',
         },
         headers: {
           'Content-Type': 'application/json; charset=utf-8',
@@ -164,12 +161,11 @@ export class AzurePipelineService {
     if (!res) return undefined;
 
     const { id: definitionId } = res.data;
-
     return this.axios.delete<any, any>(
       `https://dev.azure.com/${organization}/${project}/_apis/build/definitions/${definitionId}`,
       {
         params: {
-          'api-version': '6.0-preview.7',
+          'api-version': '7.0',
         },
         headers: {
           'Content-Type': 'application/json; charset=utf-8',
@@ -180,43 +176,47 @@ export class AzurePipelineService {
   }
 
   async run(
-    { organization, project, repository }: AzureRepositoryKey, 
-    { 
+    { organization, project, repository }: AzureRepositoryKey,
+    {
       stagesToSkip,
       resources,
       templateParameters,
-      variables
+      variables,
     }: {
-      stagesToSkip?: [],
+      stagesToSkip?: [];
       resources?: {
-        repositories: { self: { refName: string } }
-      },
-      templateParameters?: Record<string, string | number | boolean>,
-      variables?: Record<string, string | number | boolean>
-    }
+        repositories: { self: { refName: string } };
+      };
+      templateParameters?: Record<string, string | number | boolean>;
+      variables?: Record<string, string | number | boolean>;
+    },
   ) {
     const res = await this.definition({ organization, project, repository });
     if (!res) return undefined;
 
     const { id: definitionId } = res.data;
-    
+
     return this.axios.post<any, AxiosResponse<AzurePipelineRunResult>>(
       `https://dev.azure.com/${organization}/${project}/_apis/pipelines/${definitionId}/runs?api-version=7.0`,
       JSON.stringify({
-        ...{ resources: { repositories: { self: { refName: 'refs/heads/master' } }} },
+        ...{
+          resources: {
+            repositories: { self: { refName: 'refs/heads/master' } },
+          },
+        },
         stagesToSkip,
         resources,
         templateParameters,
         variables,
-        previewRun: 'false'
+        previewRun: 'false',
       }),
       {
         params: {
-          'api-version': '6.0-preview.7',
+          'api-version': '7.0',
         },
         headers: {
           'Content-Type': 'application/json; charset=utf-8',
-        }
+        },
       },
     );
   }

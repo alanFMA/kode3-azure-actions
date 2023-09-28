@@ -107,11 +107,6 @@ catalog:
       rules:
         - allow: [Template]
 
-    - type: file
-      target: ../../examples/template/DynamickPicker/template.yaml
-      rules:
-        - allow: [Template]
-
     # - type: file
     #   target: ../../examples/template/Middleware/template.yaml
     #   rules:
@@ -119,6 +114,21 @@ catalog:
 
     - type: file
       target: ../../examples/template/AzureRepos/template.yaml
+      rules:
+        - allow: [Template]
+
+    - type: file
+      target: ../../examples/template/AzurePipelines/template.yaml
+      rules:
+        - allow: [Template]
+
+    - type: file
+      target: ../../examples/template/AzureVariableGroups/template.yaml
+      rules:
+        - allow: [Template]
+
+    - type: file
+      target: ../../examples/template/AddAzureVariableGroups/template.yaml
       rules:
         - allow: [Template]
 

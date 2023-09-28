@@ -1,7 +1,7 @@
 import {
   createApiRef,
   DiscoveryApi,
-  IdentityApi
+  IdentityApi,
 } from '@backstage/core-plugin-api';
 
 // import { OpenIdConnectApi } from '@backstage/core-plugin-api';
@@ -12,6 +12,8 @@ export interface AzureDevOpsPluginApi {
   allowedOrganizations(): Promise<Organization[]>;
   allowedProjects(organization: string): Promise<Project[]>;
   repositories(organization: string, project: string): Promise<any[]>;
+  pipelines(organization: string, project: string): Promise<any[]>;
+  variableGroups(organization: string, project: string): Promise<any[]>;
 }
 
 export class AzureDevOpsPluginApiClient implements AzureDevOpsPluginApi {
@@ -24,7 +26,7 @@ export class AzureDevOpsPluginApiClient implements AzureDevOpsPluginApi {
     identityApi: IdentityApi;
     // authApi: OpenIdConnectApi;
   }) {
-    this.discoveryApi = options.discoveryApi
+    this.discoveryApi = options.discoveryApi;
     this.identityApi = options.identityApi;
     // this.authApi = options.authApi;
   }
@@ -41,25 +43,39 @@ export class AzureDevOpsPluginApiClient implements AzureDevOpsPluginApi {
     return { Authorization: `Bearer ${token}` };
   }
 
-  async allowedOrganizations(): Promise<Organization[]>{
+  async allowedOrganizations(): Promise<Organization[]> {
     const url = await this.baseUrl();
     const endpoint = `${url}/organizations`;
     const defaultHeaders = await this.headers();
-    return (await fetch(endpoint, {headers: defaultHeaders})).json();
+    return (await fetch(endpoint, { headers: defaultHeaders })).json();
   }
 
-  async allowedProjects(organization: string): Promise<Project[]>{
+  async allowedProjects(organization: string): Promise<Project[]> {
     const url = await this.baseUrl();
     const endpoint = `${url}/projects/${organization}`;
     const defaultHeaders = await this.headers();
-    return (await fetch(endpoint, {headers: defaultHeaders})).json();
+    return (await fetch(endpoint, { headers: defaultHeaders })).json();
   }
 
-  async repositories(organization: string, projects: string): Promise<any[]>{
+  async repositories(organization: string, projects: string): Promise<any[]> {
     const url = await this.baseUrl();
     const endpoint = `${url}/repositories/${organization}/${projects}`;
     const defaultHeaders = await this.headers();
-    return (await fetch(endpoint, {headers: defaultHeaders})).json();
+    return (await fetch(endpoint, { headers: defaultHeaders })).json();
+  }
+
+  async pipelines(organization: string, projects: string): Promise<any[]> {
+    const url = await this.baseUrl();
+    const endpoint = `${url}/pipelines/${organization}/${projects}`;
+    const defaultHeaders = await this.headers();
+    return (await fetch(endpoint, { headers: defaultHeaders })).json();
+  }
+
+  async variableGroups(organization: string, projects: string): Promise<any[]> {
+    const url = await this.baseUrl();
+    const endpoint = `${url}/variablegroups/${organization}/${projects}`;
+    const defaultHeaders = await this.headers();
+    return (await fetch(endpoint, { headers: defaultHeaders })).json();
   }
 }
 

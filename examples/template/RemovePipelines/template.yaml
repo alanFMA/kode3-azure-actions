@@ -1,0 +1,61 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+# https://backstage.io/docs/features/software-catalog/descriptor-format#kind-template
+kind: Template
+metadata:
+  name: template-plugin-remove-azure-pipelines
+  title: Kode3 RemoveAzurePipelines
+  description: Template for use with plugin remove-azure-pipelines
+
+spec:
+  owner: user:guest
+  type: service
+  # these are the steps which are rendered in the frontend with the form input
+  parameters:
+    - title: Configurations
+      required:
+        - context
+      properties:
+        context:
+          title: Context
+          type: object
+          description: Get config group
+          ui:field: GroupConfPMiddlewaresField
+    - title: Choose a location
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: Repository Location
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+
+  steps:
+    - id: kode3:remove-azure-pipelines
+      name: Kode3 Remove Azure Pipelines
+      action: kode3:remove-azure-pipelines
+      input:
+        context: ${{ parameters.context }}
+    #Edit yaml
+    - id: fetch-base
+      name: Fetch Base
+      action: fetch:template
+      input:
+        url: ./content
+        values:
+          k8s_context_dev: ${{ parameters.context.dev }}
+          k8s_context_hml: ${{ parameters.context.hml }}
+          k8s_context_prod: ${{ parameters.context.prod }}
+          selectazurepipelines: ${{ paramaters.selectazurepipelines }}
+    #Register Git
+
+  # Outputs are displayed to the user after a successful execution of the template.
+  output:
+    links:
+      - title: Repository
+        url: ${{ steps.publish.output.remoteUrl }}
+      - title: Open in catalog
+        icon: catalog
+        entityRef: ${{ steps.register.output.entityRef }}
