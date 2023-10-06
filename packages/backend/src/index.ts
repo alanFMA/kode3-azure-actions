@@ -32,7 +32,8 @@ import { PluginEnvironment } from './types';
 import { ServerPermissionClient } from '@backstage/plugin-permission-node';
 import { DefaultIdentityClient } from '@backstage/plugin-auth-node';
 
-import AzureDevops from './plugins/azure-devops/plugin'
+import AzureDevops from './plugins/azure-devops/plugin';
+import azureActions from './plugins/azureActions';
 
 function makeCreateEnv(config: Config) {
   const root = getRootLogger();
@@ -88,6 +89,9 @@ async function main() {
   const searchEnv = useHotMemoize(module, () => createEnv('search'));
   const appEnv = useHotMemoize(module, () => createEnv('app'));
   const AzureDevopsEnv = useHotMemoize(module, () => createEnv('AzureDevops'));
+  const AzureActionsEnv = useHotMemoize(module, () =>
+    createEnv('AzureActions'),
+  );
 
   const apiRouter = Router();
   apiRouter.use('/catalog', await catalog(catalogEnv));
@@ -97,6 +101,7 @@ async function main() {
   apiRouter.use('/proxy', await proxy(proxyEnv));
   apiRouter.use('/search', await search(searchEnv));
   apiRouter.use('/azure-devops', await AzureDevops(AzureDevopsEnv));
+  apiRouter.use('/azure-actions', await azureActions(AzureActionsEnv));
 
   // Add backends ABOVE this line; this 404 handler is the catch-all fallback
   apiRouter.use(notFoundHandler());

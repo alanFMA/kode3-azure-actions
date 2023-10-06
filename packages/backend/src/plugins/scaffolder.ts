@@ -7,9 +7,9 @@ import { Router } from 'express';
 import type { PluginEnvironment } from '../types';
 import { createPluginMiddlewareAction } from './scaffolder/actions/custom';
 import { ScmIntegrations } from '@backstage/integration';
-import { createPluginRemoveAzureReposAction } from './scaffolder/actions/deleteRepositories';
-import { createPluginRemoveAzurePipelinesAction } from './scaffolder/actions/deletePipelines';
-import { createPluginAddVariableGroups } from './scaffolder/actions/addVariables';
+import { createPluginRemoveAzureReposAction } from '@internal/plugin-azure-actions-backend';
+import { createPluginRemoveAzurePipelinesAction } from '@internal/plugin-azure-actions-backend';
+import { createPluginAddAzureVariableGroups } from '@internal/plugin-azure-actions-backend';
 
 export default async function createPlugin(
   env: PluginEnvironment,
@@ -38,7 +38,7 @@ export default async function createPlugin(
       logger: env.logger,
       config: env.config,
     }),
-    createPluginAddVariableGroups({
+    createPluginAddAzureVariableGroups({
       logger: env.logger,
       config: env.config,
     }),

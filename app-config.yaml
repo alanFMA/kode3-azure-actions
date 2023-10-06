@@ -35,8 +35,8 @@ backend:
 integrations:
   azure:
     - host: dev.azure.com
-      token: 5pzbbfn2buw43ff4yuvya3xzdr5e5ssi2htjbke73clzkvx3insa
-      organization: kode3tech
+      token: ${AZURE_DEVOPS_TOKEN}
+      organization: ${AZURE_DEVOPS_ORGANIZATION}
     ### Example for how to add your GitHub Enterprise instance using the API:
     # - host: ghe.example.net
     #   apiBaseUrl: https://ghe.example.net/api/v3

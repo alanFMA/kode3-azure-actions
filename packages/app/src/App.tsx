@@ -50,6 +50,7 @@ import { SelectAzurePipelinesExtension } from './scaffolder/SelectAzurePipelines
 import { ConfirmationMessageExtension } from './scaffolder/ConfirmationMessage';
 import { SelectAzureVariableGroupsExtension } from './scaffolder/SelectAzureVariableGroups';
 import { VariablesArrayExtension } from './scaffolder/VariablesArray';
+import { MypluginPage } from '@internal/plugin-myplugin';
 
 const microsoftAuthProvider: SignInProviderConfig = {
   id: 'azure-auth-provider',
@@ -129,6 +130,7 @@ const routes = (
     </Route>
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
+    <Route path="/myplugin" element={<MypluginPage />} />
   </FlatRoutes>
 );
 

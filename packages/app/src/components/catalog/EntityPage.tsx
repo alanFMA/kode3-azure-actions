@@ -57,6 +57,7 @@ import {
 
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
+import { EntityMypluginCard } from '@internal/plugin-myplugin';
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -134,6 +135,11 @@ const overviewContent = (
     <Grid item md={4} xs={12}>
       <EntityLinksCard />
     </Grid>
+
+    <Grid item md={4} xs={12}>
+      <EntityMypluginCard />
+    </Grid>
+
     <Grid item md={8} xs={12}>
       <EntityHasSubcomponentsCard variant="gridItem" />
     </Grid>
