@@ -1,0 +1,1 @@
+export { AzureProjectPickerExtension } from './extension';

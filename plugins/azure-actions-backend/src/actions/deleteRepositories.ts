@@ -19,7 +19,7 @@ export const createPluginRemoveAzureReposAction = (options: {
   const token = integrations?.find(() => true)?.token;
 
   if (!token) {
-    throw new Error('Missing config "integrations.azure[0].token" !');
+    throw new Error('Missing config "integrations.azure.token" !');
   }
 
   const azAxios = azureAxiosInstance(token);

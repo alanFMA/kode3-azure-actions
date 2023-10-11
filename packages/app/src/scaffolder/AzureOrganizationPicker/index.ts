@@ -1,0 +1,1 @@
+export { AzureOrganizationPickerExtension } from './extension';

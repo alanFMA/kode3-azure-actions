@@ -8,9 +8,6 @@ import { PluginEnvironment } from './types';
 import { createTemplateAction } from '@backstage/plugin-scaffolder-backend';
 import { BackstageConfigAzureElement } from './backstage-config';
 
-const organization = 'kode3tech';
-// const project = 'kode3-test';
-
 export const createPluginAddAzureVariableGroups = (options: {
   logger: PluginEnvironment['logger'];
   config: Config;
@@ -21,11 +18,14 @@ export const createPluginAddAzureVariableGroups = (options: {
   const token = integrations?.find(() => true)?.token;
 
   if (!token) {
-    throw new Error('Missing config "integrations.azure[0].token" !');
+    throw new Error('Missing config "integrations.azure.token" !');
   }
 
   const azAxios = azureAxiosInstance(token);
-  const projectService = new AzureProjectService(azAxios, organization);
+  const projectService = new AzureProjectService(
+    azAxios,
+    integrations[0].organization!,
+  );
   const azureVariableGroupService = new AzureVariableGroupService(
     azAxios,
     projectService,

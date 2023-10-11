@@ -73,6 +73,11 @@ auth:
 scaffolder:
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
 
+azureDevOps:
+  host: dev.azure.com
+  token: ${AZURE_DEVOPS_TOKEN}
+  organization: ${AZURE_DEVOPS_ORGANIZATION}
+
 catalog:
   providers:
     azureDevOps:

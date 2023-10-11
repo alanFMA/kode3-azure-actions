@@ -12,7 +12,21 @@ spec:
     - title: Kode3Tech
       required:
         - selectazurerepos
+        - org
+        - owner
       properties:
+        org:
+          title: Organization
+          type: string
+          description: Choose an Azure DevOps Organization
+          ui:field: AzureOrganizationPicker
+        owner:
+          title: Project
+          type: string
+          description: Choose an Azure DevOps Project
+          ui:field: AzureProjectPicker
+          ui:options:
+            organizationRef: org
         selectazurerepos:
           title: Azure Repositories
           type: array
@@ -36,6 +50,8 @@ spec:
       input:
         context: ${{ parameters.context }}
         selectazurerepos: ${{ parameters.selectazurerepos }}
+        organization: ${{ parameters.org }}
+        project: ${{ parameters.project }}
 
     # - id: fetch-docs
     #   name: Fetch Docs

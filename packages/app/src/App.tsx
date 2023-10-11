@@ -51,6 +51,8 @@ import { ConfirmationMessageExtension } from './scaffolder/ConfirmationMessage';
 import { SelectAzureVariableGroupsExtension } from './scaffolder/SelectAzureVariableGroups';
 import { VariablesArrayExtension } from './scaffolder/VariablesArray';
 import { MypluginPage } from '@internal/plugin-myplugin';
+import { AzureOrganizationPickerExtension } from './scaffolder/AzureOrganizationPicker';
+import { AzureProjectPickerExtension } from './scaffolder/AzureProjectPicker';
 
 const microsoftAuthProvider: SignInProviderConfig = {
   id: 'azure-auth-provider',
@@ -113,6 +115,8 @@ const routes = (
         <ConfirmationMessageExtension />
         <SelectAzureVariableGroupsExtension />
         <VariablesArrayExtension />
+        <AzureOrganizationPickerExtension />
+        <AzureProjectPickerExtension />
       </ScaffolderFieldExtensions>
     </Route>
     <Route path="/api-docs" element={<ApiExplorerPage />} />
