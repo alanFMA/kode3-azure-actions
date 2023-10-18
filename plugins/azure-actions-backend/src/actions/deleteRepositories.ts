@@ -28,15 +28,27 @@ export const createPluginRemoveAzureReposAction = (options: {
 
   return createTemplateAction<{
     selectazurerepos: string[];
+    organization: string;
+    project: string;
   }>({
     id: 'kode3:remove-azure-repos',
     schema: {
       input: {
-        required: 'selectazurerepos',
+        required: ['selectazurerepos', 'organization', 'project'],
         type: 'object',
         properties: {
           selectazurerepos: {
             type: 'array',
+            title: 'Contents',
+            description: 'The contents of the file',
+          },
+          organization: {
+            type: 'string',
+            title: 'Contents',
+            description: 'The contents of the file',
+          },
+          project: {
+            type: 'string',
             title: 'Contents',
             description: 'The contents of the file',
           },
@@ -45,12 +57,11 @@ export const createPluginRemoveAzureReposAction = (options: {
     },
     async handler(ctx) {
       const repo: Repo[] = ctx.input.selectazurerepos.map(s => JSON.parse(s));
-      ctx.logger.info(`Contexts:\n${JSON.stringify(repo, null, 2)}`);
       repo.map(r => {
         try {
           repoService.remove({
-            organization: 'kode3tech',
-            project: 'kode3-test',
+            organization: ctx.input.organization,
+            project: ctx.input.project,
             repository: r.id,
           });
           ctx.logger.info(`Repositório deletado: ${r.name}`);

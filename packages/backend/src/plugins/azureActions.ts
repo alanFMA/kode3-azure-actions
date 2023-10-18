@@ -1,4 +1,4 @@
-import { createRouter } from '@internal/plugin-azure-actions-backend';
+import { devopsRoutes } from '@internal/plugin-azure-actions-backend';
 import { Router } from 'express';
 import { PluginEnvironment } from '../types';
 
@@ -10,7 +10,9 @@ export default async function createPlugin(
 
   // The env contains a lot of goodies, but our router currently only
   // needs a logger
-  return await createRouter({
+  return await devopsRoutes.default({
     logger: env.logger,
+    identity: env.identity,
+    config: env.config,
   });
 }

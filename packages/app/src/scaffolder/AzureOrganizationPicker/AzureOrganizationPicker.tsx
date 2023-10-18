@@ -18,6 +18,8 @@ import React, { useEffect, useState } from 'react';
 
 import { SelectItem } from '@backstage/core-components';
 import { useApi } from '@backstage/core-plugin-api';
+import { FieldExtensionComponentProps } from '@backstage/plugin-scaffolder-react';
+import { FormHelperText } from '@material-ui/core';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -27,8 +29,6 @@ import {
   Organization,
   proxyAzurePluginApiRef,
 } from '../../plugins/azure-devops-apiref';
-import { FormHelperText } from '@material-ui/core';
-import { FieldExtensionComponentProps } from '@backstage/plugin-scaffolder-react';
 
 const useStyles = makeStyles(theme => ({
   formControl: {

@@ -56,15 +56,20 @@ const useStyles = makeStyles(theme => ({
 export const AzureProjectPicker = ({
   rawErrors,
   onChange,
-  schema: {
-    description,
-    // title,
-  },
+  schema: { description, title },
   uiSchema: { 'ui:options': uiOptions },
   formData,
   formContext,
-}: FieldExtensionComponentProps<string, { organizationRef?: string }>) => {
-  const { organizationRef } = uiOptions ?? { organizationRef: 'organization' };
+}: FieldExtensionComponentProps<
+  string,
+  { organizationRef?: string; projectNameFilter?: string }
+>) => {
+  const { organizationRef, projectNameFilter } = {
+    organizationRef: 'organization',
+    projectNameFilter: '.+',
+    ...(uiOptions ?? {}),
+  };
+
   const organization =
     formContext.formData[organizationRef ?? 'organization'] ?? '';
 
@@ -83,9 +88,12 @@ export const AzureProjectPicker = ({
     if (organization && fetchedProjects?.length === 0) {
       azureApi.allowedProjects(organization).then(projs => {
         if (projs && projs.length > 0) {
-          setFetchedProjects([...projs]);
-          setProject(project);
-          onChange(project);
+          const filtered = projs.filter(p =>
+            RegExp(projectNameFilter).test(p.projectName),
+          );
+          setFetchedProjects([...filtered]);
+          setProject(project || filtered[0].projectName);
+          onChange(project || filtered[0].projectName);
         }
       });
     }
@@ -97,6 +105,7 @@ export const AzureProjectPicker = ({
     setFetchedProjects,
     organization,
     onChange,
+    projectNameFilter,
   ]);
 
   return (

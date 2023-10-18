@@ -20,26 +20,34 @@ export const SelectAzureRepos = ({
   rawErrors,
   required,
   formData,
+  formContext,
   schema,
 }: FieldProps<string[]>) => {
   const [repos, setRepos] = useState<Repo[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [fetchError, setFetchError] = useState<Error | null>(null);
-  const [selectedRepos, setSelectedRepos] = useState<string[]>([]); // Rastreie os repositórios selecionados
+  const [selectedRepos, setSelectedRepos] = useState<string[]>([]);
   const azureAPI = useApi(proxyAzurePluginApiRef);
 
   useEffect(() => {
-    azureAPI
-      .repositories('kode3tech', 'kode3-test')
-      .then(data => {
-        setRepos(data);
-        setIsLoading(false);
-      })
-      .catch(error => {
-        setFetchError(error);
-        setIsLoading(false);
-      });
-  }, [azureAPI]);
+    const { org, owner } = formContext.formData;
+
+    if (org && owner) {
+      azureAPI
+        .repositories(org, owner)
+        .then(data => {
+          setRepos(data);
+          setIsLoading(false);
+        })
+        .catch(error => {
+          setFetchError(error);
+          setIsLoading(false);
+        });
+    } else {
+      setRepos([]);
+      setIsLoading(false);
+    }
+  }, [azureAPI, formContext.formData]);
 
   if (isLoading) {
     return <p>Carregando...</p>;

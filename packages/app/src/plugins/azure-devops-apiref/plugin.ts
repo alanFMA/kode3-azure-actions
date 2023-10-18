@@ -32,7 +32,7 @@ export class AzureDevOpsPluginApiClient implements AzureDevOpsPluginApi {
   }
 
   private async baseUrl() {
-    return await this.discoveryApi.getBaseUrl('azure-devops');
+    return await this.discoveryApi.getBaseUrl('azure-actions');
   }
 
   private async headers(): Promise<Record<string, string>> {
@@ -45,7 +45,9 @@ export class AzureDevOpsPluginApiClient implements AzureDevOpsPluginApi {
 
   async allowedOrganizations(): Promise<Organization[]> {
     const url = await this.baseUrl();
-    const endpoint = `${url}/organizations`;
+    const endpoint = `${url}/organization/test`;
+    console.log('URL AZURE', url);
+    console.log('ENDPOINT AZURE', endpoint);
     const defaultHeaders = await this.headers();
     return (await fetch(endpoint, { headers: defaultHeaders })).json();
   }

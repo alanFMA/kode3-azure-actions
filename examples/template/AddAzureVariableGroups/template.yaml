@@ -14,6 +14,18 @@ spec:
         - name
         - description
       properties:
+        org:
+          title: Organization
+          type: string
+          description: Choose an Azure DevOps Organization
+          ui:field: AzureOrganizationPicker
+        owner:
+          title: Project
+          type: string
+          description: Choose an Azure DevOps Project
+          ui:field: AzureProjectPicker
+          ui:options:
+            organizationRef: org
         name:
           title: Name
           type: string
@@ -43,6 +55,8 @@ spec:
       name: Kode3 Add Variables Groups for Azure Devops
       action: kode3:add-variables
       input:
+        organization: ${{ parameters.org }}
+        project: ${{ parameters.owner }}
         name: ${{ parameters.name }}
         description: ${{ parameters.description }}
         variables: ${{ parameters.variables }}

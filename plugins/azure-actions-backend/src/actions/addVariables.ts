@@ -33,15 +33,33 @@ export const createPluginAddAzureVariableGroups = (options: {
 
   return createTemplateAction<{
     organization: string;
+    project: string;
+    name: string;
     description: string;
     variables: Record<string, string>;
   }>({
     id: 'kode3:add-variables',
     schema: {
       input: {
-        required: ['name', 'description', 'variables'],
+        required: [
+          'organization',
+          'project',
+          'name',
+          'description',
+          'variables',
+        ],
         type: 'object',
         properties: {
+          organization: {
+            type: 'string',
+            title: 'Contents',
+            description: 'The contents of the file',
+          },
+          project: {
+            type: 'string',
+            title: 'Contents',
+            description: 'The contents of the file',
+          },
           name: {
             type: 'string',
             title: 'Name',
@@ -61,11 +79,12 @@ export const createPluginAddAzureVariableGroups = (options: {
       },
     },
     async handler(ctx: any) {
+      // ctx.logger.info(`Contexts:\n${JSON.stringify(ctx.input, null, 2)}`);
       const variables: Record<string, string> = ctx.input.variables || {};
 
       try {
         const createResponse = await azureVariableGroupService.create(
-          { organization: 'kode3tech', project: 'kode3-test' },
+          { organization: ctx.input.organization, project: ctx.input.project },
           ctx.input.name,
           ctx.input.description,
           variables,

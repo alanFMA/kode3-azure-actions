@@ -31,6 +31,8 @@ export const createPluginRemoveAzurePipelinesAction = (options: {
 
   return createTemplateAction<{
     selectazurepipelines: string[];
+    organization: string;
+    project: string;
   }>({
     id: 'kode3:remove-azure-pipelines',
     schema: {
@@ -43,22 +45,32 @@ export const createPluginRemoveAzurePipelinesAction = (options: {
             title: 'Contents',
             description: 'The contents of the file',
           },
+          organization: {
+            type: 'string',
+            title: 'Contents',
+            description: 'The contents of the file',
+          },
+          project: {
+            type: 'string',
+            title: 'Contents',
+            description: 'The contents of the file',
+          },
         },
       },
     },
     async handler(ctx) {
+      // ctx.logger.info(`Contexts:\n${JSON.stringify(ctx.input, null, 2)}`);
       const pipeline: Pipelines[] = ctx.input.selectazurepipelines.map(s =>
         JSON.parse(s),
       );
-      // ctx.logger.info(`Contexts:\n${pipeline}`);
       for (const p of pipeline) {
         try {
           pipelineService.remove({
-            organization: 'kode3tech',
-            project: 'kode3-test',
+            organization: ctx.input.organization,
+            project: ctx.input.project,
             repository: p.name,
           });
-          ctx.logger.info(`Repositório deletado: ${p.name}`);
+          ctx.logger.info(`Pipeline deletada: ${p.name}`);
         } catch (error) {
           ctx.logger.error(error);
         }

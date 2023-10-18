@@ -21,6 +21,7 @@ export const SelectAzurePipelines = ({
   onChange,
   rawErrors,
   required,
+  formContext,
   formData,
   schema,
 }: FieldProps<string[]>) => {
@@ -32,17 +33,24 @@ export const SelectAzurePipelines = ({
   const azureAPI = useApi(proxyAzurePluginApiRef);
 
   useEffect(() => {
-    azureAPI
-      .pipelines('kode3tech', 'kode3-test')
-      .then(data => {
-        setPipelines(data);
-        setIsLoading(false);
-      })
-      .catch(error => {
-        setFetchError(error);
-        setIsLoading(false);
-      });
-  }, [azureAPI]);
+    const { org, owner } = formContext.formData;
+
+    if (org && owner) {
+      azureAPI
+        .pipelines(org, owner)
+        .then(data => {
+          setPipelines(data);
+          setIsLoading(false);
+        })
+        .catch(error => {
+          setFetchError(error);
+          setIsLoading(false);
+        });
+    } else {
+      setPipelines([]);
+      setIsLoading(false);
+    }
+  }, [azureAPI, formContext.formData]);
 
   if (isLoading) {
     return <p>Carregando...</p>;

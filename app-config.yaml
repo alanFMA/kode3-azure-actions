@@ -61,14 +61,14 @@ techdocs:
     type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
 
 auth:
+  # providers: {}
   # see https://backstage.io/docs/auth/ to learn about auth providers
-  environment: development
   providers:
     microsoft:
       development:
-        clientId: a67a09f1-27e7-4dcc-9454-232df59aa2ae
-        clientSecret: 'rq48Q~1MKV4vQOMfLn8yUdv1ZLEfYgvACOlC0cuj'
-        tenantId: 20f29df5-8db1-4017-a9c4-5d81cb5a0369
+        clientId: ${AZURE_AUTH_APPLICATIONID}
+        clientSecret: ${AZURE_AUTH_SECRETVALUE}
+        tenantId: ${AZURE_AUTH_TENENTID}
 
 scaffolder:
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
@@ -80,17 +80,17 @@ azureDevOps:
 
 catalog:
   providers:
-    azureDevOps:
-      yourProviderId: # identifies your dataset / provider independent of config changes
-        organization: kode3tech
-        project: kode3-test
-        repository: service-* # this will match all repos starting with service-*
-        path: /catalog-info.yaml
-        schedule: # optional; same options as in TaskScheduleDefinition
-          # supports cron, ISO duration, "human duration" as used in code
-          frequency: { minutes: 30 }
-          # supports ISO duration, "human duration" as used in code
-          timeout: { minutes: 3 }
+    # azureDevOps:
+    #   yourProviderId: # identifies your dataset / provider independent of config changes
+    #     organization:
+    #     project:
+    #     repository: service-* # this will match all repos starting with service-*
+    #     path: /catalog-info.yaml
+    #     schedule: # optional; same options as in TaskScheduleDefinition
+    #       # supports cron, ISO duration, "human duration" as used in code
+    #       frequency: { minutes: 30 }
+    #       # supports ISO duration, "human duration" as used in code
+    #       timeout: { minutes: 3 }
   import:
     entityFilename: catalog-info.yaml
     pullRequestBranchName: backstage-integration

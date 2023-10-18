@@ -57,6 +57,16 @@ export default async function createRouter({
   const router = Router();
   router.use(express.json());
 
+  router.get('/organizations/test', async (_, res) => {
+    logger.info(`${_.method} ${_.url}`);
+
+    try {
+      res.json('ok');
+    } catch (error) {
+      console.error(error);
+      res.status(500).send(error);
+    }
+  });
   router.get(
     '/organizations',
     handleUserIdentity({ identity }),
@@ -64,7 +74,8 @@ export default async function createRouter({
       logger.info(`${_.method} ${_.url}`);
 
       try {
-        res.json(await orgService.list());
+        const orgServiceAwait = await orgService.list();
+        res.json(orgServiceAwait);
       } catch (error) {
         console.error(error);
         res.status(500).send(error);
