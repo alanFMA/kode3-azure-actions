@@ -35,8 +35,8 @@ backend:
 integrations:
   azure:
     - host: dev.azure.com
-      token: ${AZURE_DEVOPS_TOKEN}
-      organization: ${AZURE_DEVOPS_ORGANIZATION}
+      token: 35ryyjbq2evkgjxw5bhdez6e2imjjtm4kmzzctvmcvz4i2r62hpq
+      organization: kode3tech
     ### Example for how to add your GitHub Enterprise instance using the API:
     # - host: ghe.example.net
     #   apiBaseUrl: https://ghe.example.net/api/v3
@@ -61,22 +61,22 @@ techdocs:
     type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
 
 auth:
-  # providers: {}
   # see https://backstage.io/docs/auth/ to learn about auth providers
+  environment: development
   providers:
     microsoft:
       development:
-        clientId: ${AZURE_AUTH_APPLICATIONID}
-        clientSecret: ${AZURE_AUTH_SECRETVALUE}
-        tenantId: ${AZURE_AUTH_TENENTID}
+        clientId: a67a09f1-27e7-4dcc-9454-232df59aa2ae
+        clientSecret: 'rq48Q~1MKV4vQOMfLn8yUdv1ZLEfYgvACOlC0cuj'
+        tenantId: 20f29df5-8db1-4017-a9c4-5d81cb5a0369
 
 scaffolder:
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
 
 azureDevOps:
   host: dev.azure.com
-  token: ${AZURE_DEVOPS_TOKEN}
-  organization: ${AZURE_DEVOPS_ORGANIZATION}
+  token: 35ryyjbq2evkgjxw5bhdez6e2imjjtm4kmzzctvmcvz4i2r62hpq
+  organization: kode3tech
 
 catalog:
   providers:

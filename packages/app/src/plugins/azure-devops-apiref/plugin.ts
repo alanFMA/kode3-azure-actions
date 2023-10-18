@@ -45,9 +45,7 @@ export class AzureDevOpsPluginApiClient implements AzureDevOpsPluginApi {
 
   async allowedOrganizations(): Promise<Organization[]> {
     const url = await this.baseUrl();
-    const endpoint = `${url}/organization/test`;
-    console.log('URL AZURE', url);
-    console.log('ENDPOINT AZURE', endpoint);
+    const endpoint = `${url}/organizations`;
     const defaultHeaders = await this.headers();
     return (await fetch(endpoint, { headers: defaultHeaders })).json();
   }
@@ -82,5 +80,5 @@ export class AzureDevOpsPluginApiClient implements AzureDevOpsPluginApi {
 }
 
 export const proxyAzurePluginApiRef = createApiRef<AzureDevOpsPluginApi>({
-  id: 'plugin.azure-devops.api',
+  id: 'plugin.azure-actions.api',
 });

@@ -14,12 +14,5 @@
  * limitations under the License.
  */
 
-import * as devopsRoutes from './service/devops.router';
-
 export * from './domain';
 export * from './domain/axios';
-export * from './plugin';
-
-export {
-  devopsRoutes,
-};
