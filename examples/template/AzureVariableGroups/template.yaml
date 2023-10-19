@@ -13,6 +13,18 @@ spec:
       required:
         - selectazurevariablegroups
       properties:
+        org:
+          title: Organization
+          type: string
+          description: Choose an Azure DevOps Organization
+          ui:field: AzureOrganizationPicker
+        owner:
+          title: Project
+          type: string
+          description: Choose an Azure DevOps Project
+          ui:field: AzureProjectPicker
+          ui:options:
+            organizationRef: org
         selectazurevariablegroups:
           title: Azure VariableGroups
           type: array
@@ -31,9 +43,11 @@ spec:
     - id: kode3:adding-azure-variablegroups
       name: Kode3 Adding Azure Variablegroups
       action: kode3:adding-azure-variablegroups
-      # input:
-      #   context: ${{ parameters.context }}
-      #   selectazurevariablegroups: ${{ parameters.selectazurevariablegroups }}
+        input:
+          context: ${{ parameters.context }}
+          selectazurevariablegroups: ${{ parameters.selectazurevariablegroups }}
+          organization: ${{ parameters.org }}
+          project: ${{ parameters.owner }}         
     # - id: fetch-docs
     #   name: Fetch Docs
     #   action: fetch:plain

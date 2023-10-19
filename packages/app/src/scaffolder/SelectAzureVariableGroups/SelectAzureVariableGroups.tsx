@@ -22,6 +22,7 @@ export const SelectAzureVariableGroups = ({
   rawErrors,
   required,
   formData,
+  formContext,
   schema,
 }: FieldProps<string[]>) => {
   const [variableGroups, setVariableGroups] = useState<VariableGroup[]>([]);
@@ -34,17 +35,23 @@ export const SelectAzureVariableGroups = ({
   const azureAPI = useApi(proxyAzurePluginApiRef);
 
   useEffect(() => {
-    azureAPI
-      .variableGroups('kode3tech', 'kode3-test')
-      .then(data => {
-        setVariableGroups(data);
-        setIsLoading(false);
-      })
-      .catch(error => {
-        setFetchError(error);
-        setIsLoading(false);
-      });
-  }, [azureAPI]);
+    const { org, owner } = formContext.formData;
+    if (org && owner) {
+      azureAPI
+        .variableGroups(org, owner)
+        .then(data => {
+          setVariableGroups(data);
+          setIsLoading(false);
+        })
+        .catch(error => {
+          setFetchError(error);
+          setIsLoading(false);
+        });
+    } else {
+      setVariableGroups([]);
+      setIsLoading(false);
+    }
+  }, [azureAPI, formContext.formData]);
 
   if (isLoading) {
     return <p>Carregando...</p>;
