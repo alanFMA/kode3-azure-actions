@@ -35,8 +35,8 @@ backend:
 integrations:
   azure:
     - host: dev.azure.com
-      token: ${AZURE_DEVOPS_TOKEN}
-      organization: ${AZURE_DEVOPS_ORGANIZATION}
+      token: 35ryyjbq2evkgjxw5bhdez6e2imjjtm4kmzzctvmcvz4i2r62hpq
+      organization: kode3tech
     ### Example for how to add your GitHub Enterprise instance using the API:
     # - host: ghe.example.net
     #   apiBaseUrl: https://ghe.example.net/api/v3
@@ -75,22 +75,22 @@ scaffolder:
 
 azureDevOps:
   host: dev.azure.com
-  token: ${AZURE_DEVOPS_TOKEN}
-  organization: ${AZURE_DEVOPS_ORGANIZATION}
+  token: 35ryyjbq2evkgjxw5bhdez6e2imjjtm4kmzzctvmcvz4i2r62hpq
+  organization: kode3tech
 
 catalog:
   providers:
-    azureDevOps:
-      yourProviderId: # identifies your dataset / provider independent of config changes
-        organization: kode3tech
-        project: kode3-test
-        repository: service-* # this will match all repos starting with service-*
-        path: /catalog-info.yaml
-        schedule: # optional; same options as in TaskScheduleDefinition
-          # supports cron, ISO duration, "human duration" as used in code
-          frequency: { minutes: 30 }
-          # supports ISO duration, "human duration" as used in code
-          timeout: { minutes: 3 }
+    # azureDevOps:
+    #   yourProviderId: # identifies your dataset / provider independent of config changes
+    #     organization:
+    #     project:
+    #     repository: service-* # this will match all repos starting with service-*
+    #     path: /catalog-info.yaml
+    #     schedule: # optional; same options as in TaskScheduleDefinition
+    #       # supports cron, ISO duration, "human duration" as used in code
+    #       frequency: { minutes: 30 }
+    #       # supports ISO duration, "human duration" as used in code
+    #       timeout: { minutes: 3 }
   import:
     entityFilename: catalog-info.yaml
     pullRequestBranchName: backstage-integration

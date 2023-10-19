@@ -13,6 +13,18 @@ spec:
       required:
         - selectazurepipelines
       properties:
+        org:
+          title: Organization
+          type: string
+          description: Choose an Azure DevOps Organization
+          ui:field: AzureOrganizationPicker
+        owner:
+          title: Project
+          type: string
+          description: Choose an Azure DevOps Project
+          ui:field: AzureProjectPicker
+          ui:options:
+            organizationRef: org
         selectazurepipelines:
           title: Azure Pipelines
           type: array
@@ -36,6 +48,8 @@ spec:
       input:
         context: ${{ parameters.context }}
         selectazurepipelines: ${{ parameters.selectazurepipelines }}
+        organization: ${{parameters.org}}
+        project: ${{parameters.owner}}
   review:
     omitSteps:
       - Confirmação

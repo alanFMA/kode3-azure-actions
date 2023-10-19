@@ -51,7 +51,7 @@ spec:
         context: ${{ parameters.context }}
         selectazurerepos: ${{ parameters.selectazurerepos }}
         organization: ${{ parameters.org }}
-        project: ${{ parameters.project }}
+        project: ${{ parameters.owner }}
 
     # - id: fetch-docs
     #   name: Fetch Docs

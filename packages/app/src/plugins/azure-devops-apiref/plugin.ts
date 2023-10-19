@@ -32,7 +32,7 @@ export class AzureDevOpsPluginApiClient implements AzureDevOpsPluginApi {
   }
 
   private async baseUrl() {
-    return await this.discoveryApi.getBaseUrl('azure-devops');
+    return await this.discoveryApi.getBaseUrl('azure-actions');
   }
 
   private async headers(): Promise<Record<string, string>> {
@@ -80,5 +80,5 @@ export class AzureDevOpsPluginApiClient implements AzureDevOpsPluginApi {
 }
 
 export const proxyAzurePluginApiRef = createApiRef<AzureDevOpsPluginApi>({
-  id: 'plugin.azure-devops.api',
+  id: 'plugin.azure-actions.api',
 });
