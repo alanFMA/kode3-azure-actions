@@ -36,7 +36,7 @@
     "@backstage/plugin-search-backend-module-pg": "^0.5.8",
     "@backstage/plugin-search-backend-node": "^1.2.3",
     "@backstage/plugin-techdocs-backend": "^1.6.4",
-    "@plugin-azure-actions-backend": "^*",
+    "plugin-azure-actions-backend": "^*",
     "app": "link:../app",
     "axios": "^0.25.0",
     "axios-cache-adapter": "^2.7.3",
