@@ -5,11 +5,10 @@ import {
 } from '@backstage/plugin-scaffolder-backend';
 import { Router } from 'express';
 import type { PluginEnvironment } from '../types';
-import { createPluginMiddlewareAction } from './scaffolder/actions/custom';
 import { ScmIntegrations } from '@backstage/integration';
-import { createPluginRemoveAzureReposAction } from '@internal/plugin-azure-actions-backend';
-import { createPluginRemoveAzurePipelinesAction } from '@internal/plugin-azure-actions-backend';
-import { createPluginAddAzureVariableGroups } from '@internal/plugin-azure-actions-backend';
+import { createPluginRemoveAzureReposAction } from 'plugin-azure-actions-backend';
+import { createPluginRemoveAzurePipelinesAction } from 'plugin-azure-actions-backend';
+import { createPluginAddAzureVariableGroups } from 'plugin-azure-actions-backend';
 
 export default async function createPlugin(
   env: PluginEnvironment,
@@ -29,7 +28,6 @@ export default async function createPlugin(
 
   const actions = [
     ...builtInActions,
-    createPluginMiddlewareAction(),
     createPluginRemoveAzureReposAction({
       logger: env.logger,
       config: env.config,

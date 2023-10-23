@@ -1,4 +1,4 @@
-import { createRouter } from '@internal/plugin-azure-actions-backend';
+import { createRouter } from 'plugin-azure-actions-backend';
 import { Router } from 'express';
 import { PluginEnvironment } from '../types';
 
